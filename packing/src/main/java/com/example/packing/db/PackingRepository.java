@@ -18,7 +18,7 @@ public interface PackingRepository extends JpaRepository<Pack, Long>{
 	@Query("select s from Pack s where s.busName=:busName and s.locnNbr=:locnNbr and s.batchNbr=:batchNbr")
 	public List<Pack> findByBusNameAndLocnNbrAndBatchNbr(@Param("busName") String busName, @Param("locnNbr") Integer locnNbr, @Param("batchNbr") String batchNbr);
 
-	@Query("select s from Pack s where s.busName=:busName and s.locnNbr=:locnNbr and s.containerNbr=:containerNbr")
+	@Query("select s from Pack s where s.busName=:busName and s.locnNbr=:locnNbr and s.fromContainer=:containerNbr")
 	public List<Pack> findByBusNameAndLocnNbrAndContainerNbr(@Param("busName") String busName, @Param("locnNbr") Integer locnNbr, @Param("containerNbr") String containerNbr);
 
 	@Query("select s from Pack s where s.busName=:busName and s.locnNbr=:locnNbr and s.id=:pickId")
