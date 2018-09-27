@@ -1,6 +1,7 @@
 package com.example.packing.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +26,7 @@ public class PackingServiceImpl implements PackingService {
 	private static final Logger logger = LoggerFactory.getLogger(PackingServiceImpl.class);
 	
 	@Autowired
-	PackingRepository pickDAO;
+	PackingRepository packDAO;
 	
 	@Autowired
 	EventPublisher eventPublisher;
@@ -48,20 +49,22 @@ public class PackingServiceImpl implements PackingService {
 	 */
 	@Override
 	@Transactional
-	public PackDTO confirmPack(PackConfirmRequestDTO pickConfirmRequest) throws Exception{
-		logger.info("confirmPick Start, :" + pickConfirmRequest);
+	public PackDTO confirmPack(PackConfirmRequestDTO packConfirmRequest) throws Exception{
+		logger.info("confirmPack Start, :" + packConfirmRequest);
 		PackDTO packDTO = null;
-		Optional<Pack> pickDtl = pickDAO.findById(pickConfirmRequest.getId());
-		if(pickDtl.isPresent()) {
-			Pack packEntity = pickDtl.get();
-			packEntity.setPackedQty(packEntity.getPackedQty() + pickConfirmRequest.getQtyPacked());
-			packEntity.setUserId(pickConfirmRequest.getUserId());
+		Optional<Pack> packDtl = packDAO.findById(packConfirmRequest.getId());
+		if(packDtl.isPresent()) {
+			Pack packEntity = packDtl.get();
+			packEntity.setPackedQty((packEntity.getPackedQty()==null?0:packEntity.getPackedQty()) + packConfirmRequest.getQtyPacked());
+			packEntity.setUserId(packConfirmRequest.getUserId());
 			packEntity.setStatCode(PackStatus.PACKED.getStatCode());
-			Pack updatedPickObj = pickDAO.save(packEntity);
-			packDTO = EntityDTOConverter.getPackDTO(updatedPickObj);
-			PackConfirmationEvent pickConfirmEvent = new PackConfirmationEvent(packDTO);
-			logger.info("confirmPick End, updated pick obj:" + packDTO);
+			packEntity.setUpdatedDttm(new java.util.Date());
+			Pack updatedPackObj = packDAO.save(packEntity);
+			packDTO = EntityDTOConverter.getPackDTO(updatedPackObj);
+			PackConfirmationEvent packConfirmEvent = new PackConfirmationEvent(packDTO);
+			eventPublisher.publish(packConfirmEvent);
 		}
+		logger.info("confirmPack End, updated pack obj:" + packDTO);
 		return packDTO;
 	}
 
@@ -70,19 +73,22 @@ public class PackingServiceImpl implements PackingService {
 	 */
 	@Override
 	@Transactional
-	public PackDTO createPack(PackCreationRequestDTO pickCreationReq) throws Exception {
-		Pack newPickEntity = EntityDTOConverter.getPackEntity(pickCreationReq);
-		newPickEntity.setStatCode(PackStatus.RELEASED.getStatCode());
-		PackDTO packDTO = EntityDTOConverter.getPackDTO(pickDAO.save(newPickEntity));
+	public PackDTO createPack(PackCreationRequestDTO packCreationReq) throws Exception {
+		Pack newPackEntity = EntityDTOConverter.getPackEntity(packCreationReq);
+		Date createdDttm = new java.util.Date();
+		newPackEntity.setCreatedDttm(createdDttm);
+		newPackEntity.setUpdatedDttm(createdDttm);
+		newPackEntity.setStatCode(PackStatus.RELEASED.getStatCode());
+		PackDTO packDTO = EntityDTOConverter.getPackDTO(packDAO.save(newPackEntity));
 		PackCreatedEvent pickCreatedEvent = new PackCreatedEvent(packDTO);
 		eventPublisher.publish(pickCreatedEvent);
-		logger.info("createPick End, created new pick:" + packDTO);
+		logger.info("createPack End, created new pack:" + packDTO);
 		return packDTO;
 	}
 
 	@Override
 	public List<PackDTO> findByOrderId(String busName, Integer locnNbr, Long orderId) throws Exception {
-		List<Pack> pickEntityList = pickDAO.findByBusNameAndLocnNbrAndOrderId(busName, locnNbr, orderId);
+		List<Pack> pickEntityList = packDAO.findByBusNameAndLocnNbrAndOrderId(busName, locnNbr, orderId);
 		List<PackDTO> pickDTOList = new ArrayList();
 		if(pickEntityList!=null) {
 			for(Pack packEntity : pickEntityList) {
@@ -94,13 +100,13 @@ public class PackingServiceImpl implements PackingService {
 
 	@Override
 	public PackDTO findByPackId(String busName, Integer locnNbr, Long pickId) throws Exception {
-		Pack packEntity = pickDAO.findByPickId(busName, locnNbr, pickId);
+		Pack packEntity = packDAO.findByPickId(busName, locnNbr, pickId);
 		return EntityDTOConverter.getPackDTO(packEntity);
 	}
 
 	@Override
 	public List<PackDTO> findByOrderNbr(String busName, Integer locnNbr, String orderNbr) throws Exception {
-		List<Pack> pickEntityList = pickDAO.findByBusNameAndLocnNbrAndOrderNbr(busName, locnNbr, orderNbr);
+		List<Pack> pickEntityList = packDAO.findByBusNameAndLocnNbrAndOrderNbr(busName, locnNbr, orderNbr);
 		List<PackDTO> pickDTOList = new ArrayList();
 		if(pickEntityList!=null) {
 			for(Pack packEntity : pickEntityList) {
@@ -112,7 +118,7 @@ public class PackingServiceImpl implements PackingService {
 
 	@Override
 	public List<PackDTO> findByBatchNbr(String busName, Integer locnNbr, String batchNbr) throws Exception {
-		List<Pack> pickEntityList = pickDAO.findByBusNameAndLocnNbrAndBatchNbr(busName, locnNbr, batchNbr);
+		List<Pack> pickEntityList = packDAO.findByBusNameAndLocnNbrAndBatchNbr(busName, locnNbr, batchNbr);
 		List<PackDTO> pickDTOList = new ArrayList();
 		if(pickEntityList!=null) {
 			for(Pack packEntity : pickEntityList) {
@@ -124,7 +130,7 @@ public class PackingServiceImpl implements PackingService {
 
 	@Override
 	public List<PackDTO> findByContainerNbr(String busName, Integer locnNbr, String containerNbr) throws Exception {
-		List<Pack> pickEntityList = pickDAO.findByBusNameAndLocnNbrAndContainerNbr(busName, locnNbr, containerNbr);
+		List<Pack> pickEntityList = packDAO.findByBusNameAndLocnNbrAndContainerNbr(busName, locnNbr, containerNbr);
 		List<PackDTO> pickDTOList = new ArrayList();
 		if(pickEntityList!=null) {
 			for(Pack packEntity : pickEntityList) {

@@ -7,12 +7,14 @@ import com.example.packing.dto.responses.PackDTO;
 public class EntityDTOConverter {
 
 	public static PackDTO getPackDTO(Pack packEntity) {
-		PackDTO packDTO = new PackDTO(packEntity.getId(), packEntity.getBatchNbr(), packEntity.getBusName(),
-				packEntity.getLocnNbr(), packEntity.getBusUnit(), packEntity.getCompany(), packEntity.getDivision(),
-				packEntity.getItemBrcd(), packEntity.getQty(), packEntity.getPackedQty(), packEntity.getFromContainer(),
-				packEntity.getToContainer(), packEntity.getStatCode(), packEntity.getOrderId(),
-				packEntity.getOrderNbr(), packEntity.getPackageNbr(), packEntity.getOrderLineNbr(),
-				packEntity.getTransName(), packEntity.getSource(), packEntity.getHostName(), packEntity.getUserId());
+		PackDTO packDTO = new PackDTO(packEntity.getId(), packEntity.getPickId(), packEntity.getOrderId(),
+				packEntity.getOrderLineId(), packEntity.getOrderLineNbr(), packEntity.getBatchNbr(), 
+				packEntity.getBusName(), packEntity.getLocnNbr(),
+				packEntity.getBusUnit(), packEntity.getCompany(), packEntity.getDivision(), packEntity.getItemBrcd(),
+				packEntity.getQty(), packEntity.getPackedQty(), packEntity.getStatCode(), packEntity.getFromContainer(),
+				packEntity.getToContainer(), packEntity.getOrderNbr(),
+				packEntity.getPackageNbr(),  packEntity.getTransName(),
+				packEntity.getSource(), packEntity.getHostName(), packEntity.getUserId());
 		return packDTO;
 	}
 
@@ -29,6 +31,11 @@ public class EntityDTOConverter {
 		packEntity.setUserId(packCreationReq.getUserId());
 		packEntity.setItemBrcd(packCreationReq.getItemBrcd());
 		packEntity.setQty(packCreationReq.getQty());
+		packEntity.setOrderId(packCreationReq.getOrderId());
+		packEntity.setOrderLineId(packCreationReq.getOrderLineId());
+		packEntity.setOrderLineNbr(packCreationReq.getOrderLineNbr());
+		packEntity.setPickId(packCreationReq.getPickId());
+		packEntity.setLocnNbr(packCreationReq.getLocnNbr());
 		return packEntity;
 	}
 

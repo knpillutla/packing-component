@@ -21,6 +21,11 @@ public class PickConfirmToPackRequestConverter {
 		packReq.setOrderLineNbr(pickDTO.getOrderLineNbr());
 		packReq.setQty(pickDTO.getQty());
 		packReq.setPackedQty(0);
+		packReq.setOrderId(pickDTO.getOrderId());
+		packReq.setOrderLineId(pickDTO.getOrderLineId());
+		packReq.setOrderLineNbr(pickDTO.getOrderLineNbr());
+		packReq.setFromContainer(pickDTO.getToContainer());
+
 		//pickReq.setCompany(invnAllocatedEvent);
 		//pickReq.setDivision(division);
 		packReq.setUserId(pickDTO.getUserId());

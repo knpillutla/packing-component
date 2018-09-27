@@ -27,7 +27,7 @@ public class PackCreationRequestDTO  extends BaseDTO{
 	Integer packedQty;
 	String fromContainer;
 	String toContainer;
-	Integer orderId;
+	Long orderId;
 	String orderNbr;
 	String packageNbr;
 	Integer orderLineNbr;
@@ -35,4 +35,5 @@ public class PackCreationRequestDTO  extends BaseDTO{
 	String source;
 	String hostName;
 	String userId;
+	Long orderLineId;
 }

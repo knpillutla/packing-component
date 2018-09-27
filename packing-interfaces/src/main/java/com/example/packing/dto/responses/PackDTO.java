@@ -15,6 +15,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PackDTO  extends BaseDTO{
 	Long id;
+	Long pickId;
+	Long orderId;
+	Long orderLineId;
+	Integer orderLineNbr;
 	String batchNbr;
 	String busName;
 	Integer locnNbr;
@@ -24,13 +28,11 @@ public class PackDTO  extends BaseDTO{
 	String itemBrcd;
 	Integer qty;
 	Integer packedQty;
+	Integer statCode;
 	String fromContainer;
 	String toContainer;
-	Integer statCode;
-	Integer orderId;
 	String orderNbr;
 	String packageNbr;
-	Integer orderLineNbr;
 	String transName;
 	String source;
 	String hostName;

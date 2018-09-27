@@ -3,15 +3,11 @@ package com.example.packing.db;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,7 +27,16 @@ public class Pack  implements Serializable{
 	Long id;
 
 	@Column(name="PICK_ID")
-	Integer pickId;
+	Long pickId;
+
+	@Column(name="ORDER_ID")
+	Long orderId;
+
+	@Column(name="ORDER_LINE_ID")
+	Long orderLineId;
+
+	@Column(name="ORDER_LINE_NBR")
+	Integer orderLineNbr;
 
 	@Column(name="BATCH_NBR")
 	String batchNbr;
@@ -60,26 +65,20 @@ public class Pack  implements Serializable{
 	@Column(name="PACKED_QTY")
 	Integer packedQty;
 
+	@Column(name="STAT_CODE")
+	Integer statCode;
+
 	@Column(name="FROM_CONTAINER_NBR")
 	String fromContainer;
 
 	@Column(name="TO_CONTAINER_NBR")
 	String toContainer;
 
-	@Column(name="STAT_CODE")
-	Integer statCode;
-
-	@Column(name="ORDER_ID")
-	Integer orderId;
-
 	@Column(name="ORDER_NBR")
 	String orderNbr;
 
 	@Column(name="PACKAGE_NBR")
 	String packageNbr;
-
-	@Column(name="ORDER_LINE_NBR")
-	Integer orderLineNbr;
 
 	@Column(name="TRANSACTION_NAME")
 	String transName;

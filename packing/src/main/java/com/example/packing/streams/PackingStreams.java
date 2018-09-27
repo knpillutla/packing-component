@@ -9,7 +9,7 @@ public interface PackingStreams {
     public String PICK_OUTPUT="pick-out";
     public String PACK_OUTPUT="pack-out";
     
-    @Output(PICK_OUTPUT)
+    @Input(PICK_OUTPUT)
     public SubscribableChannel outboundPick();
 
     @Output(PACK_OUTPUT)
